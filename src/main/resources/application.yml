@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+custom:
+  security:
+    publickey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzA3wqInfNbrdaT4N3TgYRL7TcVlwUDP2dkFx5H8VF51IzNfJSDBknfAYf3+t5ph+z9bGeo5moSyy/OkGduJB5IObT9i/UJUAdPE3SyEyVDWEQVxNtp/FHBfOdlz0i4cveGk5/64o1f/cZE0CKIhHL4GVJ66hQa+FzR274aNaRu4OGs4FKPTChwagFTPmus36ngrsdUG21aPhu9oIi8c5JVbISGejDHBWez/3BxyhJcOn54xm0lTiFFpKnc8IpKaSP7+1X1xZMTZwmqsJdMYsUsAeeHHqWn+DkZP1G/4IcGYW8ZTTIDQGAvPPeXY/zbNP+Jg8zmpqkioVpFCczkTWQwIDAQAB
+  path:
+    user:
+      prefix: /user/**
