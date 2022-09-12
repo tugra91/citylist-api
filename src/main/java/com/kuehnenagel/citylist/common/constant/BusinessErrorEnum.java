@@ -4,7 +4,7 @@ public enum BusinessErrorEnum {
 
     NOT_EXITS_CITY_RECORD_ERROR ("-2001", "It is not found a city entity. Please insert a valid ID."),
 
-    EXIST_USER_RECORD_ERROR("-3001", "Can not register with that username due to it is used by someone else.");
+    EXIST_USER_RECORD_ERROR("-2002", "Can not register with that username due to it is used by someone else.");
 
     private final String code;
     private final String message;
