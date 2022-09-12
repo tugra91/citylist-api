@@ -19,6 +19,8 @@ public class IUserService implements UserService {
 
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public RegisterUserOutput registerUser(RegisterUserInput input) {
         UserEntity existUser = userRepository.findByUsername(input.newUser().username()).orElse(null);
@@ -26,7 +28,7 @@ public class IUserService implements UserService {
             throw new BusinessException(BusinessErrorEnum.EXIST_USER_RECORD_ERROR.getCode(), BusinessErrorEnum.EXIST_USER_RECORD_ERROR.getMessage());
         }
         User newUser = input.newUser();
-        UserEntity newUserEntity = new UserEntity(null, newUser.username(), new BCryptPasswordEncoder().encode(newUser.password()), newUser.name(), "ALLOW_EDIT");
+        UserEntity newUserEntity = new UserEntity(null, newUser.username(), passwordEncoder.encode(newUser.password()), newUser.name(), "ALLOW_EDIT");
         UserEntity savedUserEntity = userRepository.save(newUserEntity);
         return new RegisterUserOutput(User.convertUserEntityToUser(savedUserEntity));
     }

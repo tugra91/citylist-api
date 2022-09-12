@@ -35,16 +35,16 @@ public class ILoginService implements LoginService {
     @Value(value = "${custom.security.client-secret}")
     private String CLIENTSECRET;
     @Value(value = "${custom.security.response-type}")
-    private String RESPONSETYPE = "code";
+    private String RESPONSETYPE;
     @Value(value = "${custom.security.scope}")
-    private String SCOPE = "api_endpoint_security";
+    private String SCOPE ;
     @Value(value = "${custom.security.redirect-uri}")
-    private String REDIRECTURI = "http://127.0.0.1:8082/welcome/getCode";
+    private String REDIRECTURI;
 
     @Value(value = "${custom.security.oauth2-token-url}")
-    private String OAuth2TOKENURL = "http://127.0.0.1:8082/oauth2/token";
+    private String OAuth2TOKENURL;
     @Value(value = "${custom.security.grant-type}")
-    private String GRANTTYPE = "authorization_code";
+    private String GRANTTYPE;
 
     private static final String CLIENTIDKEY = "client_id";
     private static final String REDIRECTURIKEY = "redirect_uri";
