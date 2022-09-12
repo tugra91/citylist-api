@@ -30,3 +30,9 @@ docker exec -i -t kuehneExampleDb mongo --username cityListAdmin --password kueh
 db.createUser({user:"cityListUser", pwd:"kuehneNagel", roles:[{role:"readWrite", db:"cityList"}], passwordDigestor:"server"});
 ```
 After all of acts, you might start application with debug mode and enjoy it. :) 
+
+## Key Points
+
+It fetchs all of cities data from cvs file to initialize and load dataList to database. It do it in the CityListService class. If cvs datas had recorded before, initial method doesn't do anything. 
+
+In Search was used async and multi-threading technologies through this method can be search the text with two way when user insert a searchText. When a user start a search process, firstly method checks the text for whether number or alphanumeric and then If text is a number, method search the text for cityId and cityName on the other hand If text is a alphanumeric, method search the text for only cityName. In all of process, Both method work separete each other so async.  
