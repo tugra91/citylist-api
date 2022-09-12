@@ -1,5 +1,7 @@
 package com.kuehnenagel.citylist.service.impl;
 
+import com.kuehnenagel.citylist.common.constant.SystemErrorEnum;
+import com.kuehnenagel.citylist.common.exception.SystemException;
 import com.kuehnenagel.citylist.dto.input.SignInInput;
 import com.kuehnenagel.citylist.dto.model.Token;
 import com.kuehnenagel.citylist.dto.output.SignInOutput;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -75,14 +78,18 @@ public class ILoginService implements LoginService {
                 if(tokenResponse.getStatusCode().is2xxSuccessful()) {
                     return new SignInOutput(Objects.requireNonNull(tokenResponse.getBody()).access_token());
                 } else {
-                    return new SignInOutput(null);
+                    throw new SystemException(SystemErrorEnum.ACCESS_TOKEN_SYSTEM_EXCEPTION.getCode(), SystemErrorEnum.ACCESS_TOKEN_SYSTEM_EXCEPTION.getMessage());
                 }
-
+            } else if(response.getStatusCode().is4xxClientError()) {
+                throw new SystemException(SystemErrorEnum.UNAUTHORIZATION_SYSTEM_EXCEPTION.getCode(), SystemErrorEnum.UNAUTHORIZATION_SYSTEM_EXCEPTION.getMessage());
             } else {
-                return new SignInOutput(null);
+                throw new SystemException(SystemErrorEnum.GENERAL_SYSTEM_EXCEPTION.getCode(), SystemErrorEnum.GENERAL_SYSTEM_EXCEPTION.getMessage());
             }
         } catch (Exception e) {
-            return new SignInOutput(null);
+            if (e instanceof HttpClientErrorException.Unauthorized) {
+                throw new SystemException(SystemErrorEnum.UNAUTHORIZATION_SYSTEM_EXCEPTION.getCode(), SystemErrorEnum.UNAUTHORIZATION_SYSTEM_EXCEPTION.getMessage());
+            }
+            throw new SystemException(SystemErrorEnum.GENERAL_SYSTEM_EXCEPTION.getCode(), SystemErrorEnum.GENERAL_SYSTEM_EXCEPTION.getMessage());
         }
     }
 
