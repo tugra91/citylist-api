@@ -1,4 +1,4 @@
-# CityList Backend Api
+# CityList Backend API
 
 ## Stack
 
