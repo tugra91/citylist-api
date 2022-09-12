@@ -5,13 +5,11 @@ import com.kuehnenagel.citylist.dto.model.Token;
 import com.kuehnenagel.citylist.dto.output.SignInOutput;
 import com.kuehnenagel.citylist.service.LoginService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.OAuth2Token;
-import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -27,15 +25,28 @@ public class ILoginService implements LoginService {
 
     private final RestTemplate restTemplate;
 
-    private static final String OAuth2URL = "http://127.0.0.1:8082/oauth2/authorize";
-    private static final String CLIENTID = "citylist-api";
-    private static final String CLIENTSECRET = "z!yyklm37";
-    private static final String RESPONSETYPE = "code";
-    private static final String SCOPE = "api_endpoint_security";
-    private static final String REDIRECTURI = "http://127.0.0.1:8082/welcome/getCode";
+    @Value(value = "${custom.security.oauth2url}")
+    private String OAuth2URL;
+    @Value(value = "${custom.security.client-id}")
+    private String CLIENTID;
+    @Value(value = "${custom.security.client-secret}")
+    private String CLIENTSECRET;
+    @Value(value = "${custom.security.response-type}")
+    private String RESPONSETYPE = "code";
+    @Value(value = "${custom.security.scope}")
+    private String SCOPE = "api_endpoint_security";
+    @Value(value = "${custom.security.redirect-uri}")
+    private String REDIRECTURI = "http://127.0.0.1:8082/welcome/getCode";
 
-    private static final String OAuth2TOKENURL = "http://127.0.0.1:8082/oauth2/token";
-    private static final String GRANTTYPE = "authorization_code";
+    @Value(value = "${custom.security.oauth2-token-url}")
+    private String OAuth2TOKENURL = "http://127.0.0.1:8082/oauth2/token";
+    @Value(value = "${custom.security.grant-type}")
+    private String GRANTTYPE = "authorization_code";
+
+    private static final String CLIENTIDKEY = "client_id";
+    private static final String REDIRECTURIKEY = "redirect_uri";
+    private static final String CODEKEY = "code";
+    private static final String GRANTTYPEKEY = "grant_type";
 
     @Override
     public SignInOutput signIn(SignInInput input) {
@@ -53,10 +64,10 @@ public class ILoginService implements LoginService {
             if(response.getStatusCode().is2xxSuccessful()) {
                 URI tokenUrl = new URI(OAuth2TOKENURL);
                 HttpHeaders body = new HttpHeaders();
-                body.add("client_id", CLIENTID);
-                body.add("redirect_uri",REDIRECTURI);
-                body.add("code", response.getBody());
-                body.add("grant_type", GRANTTYPE);
+                body.add(CLIENTIDKEY, CLIENTID);
+                body.add(REDIRECTURIKEY,REDIRECTURI);
+                body.add(CODEKEY, response.getBody());
+                body.add(GRANTTYPEKEY, GRANTTYPE);
                 HttpEntity<MultiValueMap<String, String>> tokenEntity = new HttpEntity<>(body, createHeaders(CLIENTID, CLIENTSECRET));
                 ResponseEntity<Token> tokenResponse =
                         restTemplate.exchange(tokenUrl, HttpMethod.POST, tokenEntity, Token.class);
