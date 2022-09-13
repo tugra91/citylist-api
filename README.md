@@ -6,12 +6,13 @@
 - MongoDB
 - Maven
 - Docker
-
+- JDK 18
 ## Install instructors
 
 ### Prerequirement
 - Docker
 - Maven
+- JDK 18
 
 ### Prior Knowledge
 
